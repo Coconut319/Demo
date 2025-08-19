@@ -1,6 +1,6 @@
 /**
- * GDPR-Compliant Cookie Consent Management
- * Blocks all non-essential scripts until explicit consent is given
+ * GDPR/ePrivacy Compliant Cookie Consent Management
+ * Prevents ALL non-essential scripts from loading until explicit consent
  */
 
 class CookieManager {
@@ -13,23 +13,27 @@ class CookieManager {
         this.cookieExpiry = 365; // days
         this.consentStatus = this.getConsentStatus();
         
-        // Script categories
-        this.scriptCategories = {
-            essential: ['js/main.js', 'js/cookies.js'],
-            analytics: ['js/analytics.js', 'js/3d-scene.js', 'js/testimonials.js'],
-            marketing: ['js/tracking.js'],
-            external: ['https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js']
-        };
+        // Define what scripts are essential vs non-essential
+        this.essentialScripts = ['js/main.js', 'js/cookies.js'];
+        this.nonEssentialScripts = [
+            'js/animations.js',
+            'js/3d-scene.js', 
+            'js/testimonials.js',
+            'js/contact.js',
+            'js/faq.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
+        ];
         
-        // CSS categories
-        this.cssCategories = {
-            external: ['https://unpkg.com/leaflet@1.9.4/dist/leaflet.css']
-        };
+        this.nonEssentialCSS = [
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
+        ];
         
-        // Block all non-essential scripts initially
-        this.blockNonEssentialScripts();
+        // Store blocked scripts for later loading
+        this.blockedScripts = [];
+        this.blockedCSS = [];
         
-        console.log('CookieManager initialized with GDPR compliance');
+        console.log('CookieManager initialized - GDPR/ePrivacy compliant');
         this.init();
     }
 
@@ -38,6 +42,9 @@ class CookieManager {
             console.warn('Cookie banner not found');
             return;
         }
+        
+        // Immediately block all non-essential scripts before they load
+        this.blockNonEssentialScripts();
         
         this.setupEventListeners();
         this.checkConsent();
@@ -57,20 +64,6 @@ class CookieManager {
                 this.declineCookies();
             });
         }
-
-        // Close banner when clicking outside
-        document.addEventListener('click', (e) => {
-            if (this.banner && !this.banner.contains(e.target) && this.banner.classList.contains('show')) {
-                this.hideBanner();
-            }
-        });
-
-        // Keyboard support
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.banner && this.banner.classList.contains('show')) {
-                this.hideBanner();
-            }
-        });
     }
 
     checkConsent() {
@@ -151,7 +144,7 @@ class CookieManager {
         const cookieValue = JSON.stringify({
             status: status,
             timestamp: new Date().toISOString(),
-            version: '2.0'
+            version: '3.0'
         });
         
         this.setCookie(this.cookieName, cookieValue, this.cookieExpiry);
@@ -213,35 +206,69 @@ class CookieManager {
         document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
     }
 
-    // Block all non-essential scripts initially
+    // CRITICAL: Block all non-essential scripts BEFORE they load
     blockNonEssentialScripts() {
-        // Remove all script tags except essential ones
+        console.log('Blocking non-essential scripts for GDPR compliance');
+        
+        // Find all script tags that are about to load
         const scripts = document.querySelectorAll('script[src]');
+        
         scripts.forEach(script => {
             const src = script.getAttribute('src');
-            if (!this.isEssentialScript(src)) {
+            
+            // Check if this is a non-essential script
+            if (this.isNonEssentialScript(src)) {
                 console.log('Blocking non-essential script:', src);
-                script.setAttribute('data-blocked', 'true');
-                script.style.display = 'none';
+                
+                // Store the script info for later loading
+                this.blockedScripts.push({
+                    src: src,
+                    element: script,
+                    type: 'script'
+                });
+                
+                // Remove the script from DOM to prevent loading
+                if (script.parentNode) {
+                    script.parentNode.removeChild(script);
+                }
+            }
+        });
+        
+        // Also block non-essential CSS
+        const links = document.querySelectorAll('link[rel="stylesheet"]');
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            
+            if (this.isNonEssentialCSS(href)) {
+                console.log('Blocking non-essential CSS:', href);
+                
+                this.blockedCSS.push({
+                    href: href,
+                    element: link,
+                    type: 'css'
+                });
+                
+                if (link.parentNode) {
+                    link.parentNode.removeChild(link);
+                }
             }
         });
     }
 
-    // Check if a script is essential
-    isEssentialScript(src) {
-        return this.scriptCategories.essential.some(essential => src.includes(essential));
+    isNonEssentialScript(src) {
+        return this.nonEssentialScripts.some(nonEssential => src.includes(nonEssential));
+    }
+
+    isNonEssentialCSS(href) {
+        return this.nonEssentialCSS.some(nonEssential => href.includes(nonEssential));
     }
 
     // Load only essential scripts
     loadEssentialScripts() {
         console.log('Loading essential scripts only');
         
-        // Load essential scripts
-        this.scriptCategories.essential.forEach(scriptPath => {
-            this.loadScript(scriptPath, 'essential');
-        });
-        
-        // Enable basic functionality
+        // Essential scripts should already be loaded or loading
+        // Just ensure basic functionality works
         this.enableBasicFeatures();
     }
 
@@ -249,32 +276,27 @@ class CookieManager {
     loadAllScripts() {
         console.log('Loading all scripts with consent');
         
-        // Load essential scripts
-        this.loadEssentialScripts();
+        // Load all blocked scripts
+        this.blockedScripts.forEach(item => {
+            if (item.type === 'script') {
+                this.loadScript(item.src);
+            }
+        });
         
-        // Load analytics scripts
-        if (this.consentStatus === 'accepted') {
-            this.scriptCategories.analytics.forEach(scriptPath => {
-                this.loadScript(scriptPath, 'analytics');
-            });
-            
-            this.scriptCategories.external.forEach(scriptPath => {
-                this.loadScript(scriptPath, 'external');
-            });
-            
-            // Load external CSS
-            this.cssCategories.external.forEach(cssPath => {
-                this.loadCSS(cssPath, 'external');
-            });
-            
-            // Enable enhanced features
-            this.enableEnhancedFeatures();
-        }
+        // Load all blocked CSS
+        this.blockedCSS.forEach(item => {
+            if (item.type === 'css') {
+                this.loadCSS(item.href);
+            }
+        });
+        
+        // Enable enhanced features
+        this.enableEnhancedFeatures();
     }
 
     // Load a specific script
-    loadScript(src, category) {
-        console.log(`Loading ${category} script:`, src);
+    loadScript(src) {
+        console.log('Loading script:', src);
         
         // Check if script is already loaded
         if (document.querySelector(`script[src="${src}"]`)) {
@@ -284,7 +306,7 @@ class CookieManager {
         
         const script = document.createElement('script');
         script.src = src;
-        script.setAttribute('data-category', category);
+        script.setAttribute('data-loaded-by-consent', 'true');
         
         // Add integrity and crossorigin for external scripts
         if (src.includes('https://')) {
@@ -297,17 +319,17 @@ class CookieManager {
         document.head.appendChild(script);
         
         script.onload = () => {
-            console.log(`Successfully loaded ${category} script:`, src);
+            console.log('Successfully loaded script:', src);
         };
         
         script.onerror = () => {
-            console.error(`Failed to load ${category} script:`, src);
+            console.error('Failed to load script:', src);
         };
     }
 
     // Load a specific CSS file
-    loadCSS(href, category) {
-        console.log(`Loading ${category} CSS:`, href);
+    loadCSS(href) {
+        console.log('Loading CSS:', href);
         
         // Check if CSS is already loaded
         if (document.querySelector(`link[href="${href}"]`)) {
@@ -318,7 +340,7 @@ class CookieManager {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = href;
-        link.setAttribute('data-category', category);
+        link.setAttribute('data-loaded-by-consent', 'true');
         
         // Add integrity and crossorigin for external CSS
         if (href.includes('https://')) {
@@ -331,16 +353,15 @@ class CookieManager {
         document.head.appendChild(link);
         
         link.onload = () => {
-            console.log(`Successfully loaded ${category} CSS:`, href);
+            console.log('Successfully loaded CSS:', href);
         };
         
         link.onerror = () => {
-            console.error(`Failed to load ${category} CSS:`, href);
+            console.error('Failed to load CSS:', href);
         };
     }
 
     enableBasicFeatures() {
-        // Enable basic website functionality
         console.log('Enabling basic features');
         
         // Initialize basic functionality
@@ -350,23 +371,25 @@ class CookieManager {
     }
 
     enableEnhancedFeatures() {
-        // Enable enhanced features for accepted cookies
         console.log('Enabling enhanced features');
         
-        // Initialize 3D scene if Three.js is loaded
-        if (typeof THREE !== 'undefined' && typeof window.init3DScene === 'function') {
-            window.init3DScene();
-        }
-        
-        // Initialize map if Leaflet is loaded
-        if (typeof L !== 'undefined' && typeof window.initMap === 'function') {
-            window.initMap();
-        }
-        
-        // Initialize other enhanced features
-        if (typeof window.initEnhancedFeatures === 'function') {
-            window.initEnhancedFeatures();
-        }
+        // Wait a bit for scripts to load, then initialize enhanced features
+        setTimeout(() => {
+            // Initialize 3D scene if Three.js is loaded
+            if (typeof THREE !== 'undefined' && typeof window.init3DScene === 'function') {
+                window.init3DScene();
+            }
+            
+            // Initialize map if Leaflet is loaded
+            if (typeof L !== 'undefined' && typeof window.initMap === 'function') {
+                window.initMap();
+            }
+            
+            // Initialize other enhanced features
+            if (typeof window.initEnhancedFeatures === 'function') {
+                window.initEnhancedFeatures();
+            }
+        }, 1000);
     }
 
     showSuccessMessage(message) {
@@ -452,10 +475,13 @@ class CookieManager {
     }
 }
 
-// Initialize cookie manager when DOM is ready
+// Initialize cookie manager immediately to block scripts before they load
+console.log('Initializing GDPR/ePrivacy compliant CookieManager');
+window.cookieManager = new CookieManager();
+
+// Also initialize when DOM is ready for any remaining setup
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing GDPR-compliant CookieManager');
-    window.cookieManager = new CookieManager();
+    console.log('DOM loaded, CookieManager already initialized');
 });
 
 // Export for use in other modules
