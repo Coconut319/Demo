@@ -98,9 +98,14 @@ class OrthodonticsWebsite {
     }
 
     setupMobileMenu() {
-        if (!this.mobileMenuToggle) return;
+        if (!this.mobileMenuToggle) {
+            console.error('Mobile menu toggle not found!');
+            return;
+        }
 
-        this.mobileMenuToggle.addEventListener('click', () => {
+        this.mobileMenuToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             this.toggleMobileMenu();
         });
 

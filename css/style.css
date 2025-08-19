@@ -445,6 +445,8 @@ button {
     background: none;
     border: none;
     cursor: pointer;
+    z-index: 10000;
+    position: relative;
 }
 
 .hamburger-line {
@@ -1275,13 +1277,18 @@ button {
     border-bottom: 1px solid var(--neutral-200);
     box-shadow: var(--shadow-xl);
     transform: translateY(-100%);
-    transition: transform var(--transition-base);
-    z-index: var(--z-dropdown);
-    display: none;
+    transition: all var(--transition-base);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .mobile-nav.show {
     transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .mobile-nav-list {
@@ -1350,7 +1357,6 @@ button {
     }
     
     .mobile-nav {
-        display: block;
         top: var(--header-height-mobile);
     }
     
