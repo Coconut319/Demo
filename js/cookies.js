@@ -21,6 +21,11 @@ class CookieManager {
             external: ['https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js']
         };
         
+        // CSS categories
+        this.cssCategories = {
+            external: ['https://unpkg.com/leaflet@1.9.4/dist/leaflet.css']
+        };
+        
         // Block all non-essential scripts initially
         this.blockNonEssentialScripts();
         
@@ -257,6 +262,11 @@ class CookieManager {
                 this.loadScript(scriptPath, 'external');
             });
             
+            // Load external CSS
+            this.cssCategories.external.forEach(cssPath => {
+                this.loadCSS(cssPath, 'external');
+            });
+            
             // Enable enhanced features
             this.enableEnhancedFeatures();
         }
@@ -292,6 +302,40 @@ class CookieManager {
         
         script.onerror = () => {
             console.error(`Failed to load ${category} script:`, src);
+        };
+    }
+
+    // Load a specific CSS file
+    loadCSS(href, category) {
+        console.log(`Loading ${category} CSS:`, href);
+        
+        // Check if CSS is already loaded
+        if (document.querySelector(`link[href="${href}"]`)) {
+            console.log('CSS already loaded:', href);
+            return;
+        }
+        
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        link.setAttribute('data-category', category);
+        
+        // Add integrity and crossorigin for external CSS
+        if (href.includes('https://')) {
+            if (href.includes('leaflet.css')) {
+                link.integrity = 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';
+                link.crossOrigin = '';
+            }
+        }
+        
+        document.head.appendChild(link);
+        
+        link.onload = () => {
+            console.log(`Successfully loaded ${category} CSS:`, href);
+        };
+        
+        link.onerror = () => {
+            console.error(`Failed to load ${category} CSS:`, href);
         };
     }
 
