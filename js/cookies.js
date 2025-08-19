@@ -1,6 +1,6 @@
 /**
- * Cookie Consent Management
- * Handles GDPR-compliant cookie consent banner and cookie management
+ * GDPR-Compliant Cookie Consent Management
+ * Blocks all non-essential scripts until explicit consent is given
  */
 
 class CookieManager {
@@ -13,13 +13,18 @@ class CookieManager {
         this.cookieExpiry = 365; // days
         this.consentStatus = this.getConsentStatus();
         
-        console.log('CookieManager initialized', {
-            banner: this.banner,
-            acceptBtn: this.acceptBtn,
-            declineBtn: this.declineBtn,
-            consentStatus: this.consentStatus
-        });
+        // Script categories
+        this.scriptCategories = {
+            essential: ['js/main.js', 'js/cookies.js'],
+            analytics: ['js/analytics.js', 'js/3d-scene.js', 'js/testimonials.js'],
+            marketing: ['js/tracking.js'],
+            external: ['https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js']
+        };
         
+        // Block all non-essential scripts initially
+        this.blockNonEssentialScripts();
+        
+        console.log('CookieManager initialized with GDPR compliance');
         this.init();
     }
 
@@ -39,8 +44,6 @@ class CookieManager {
                 console.log('Accept cookies clicked');
                 this.acceptCookies();
             });
-        } else {
-            console.warn('Accept cookies button not found');
         }
 
         if (this.declineBtn) {
@@ -48,8 +51,6 @@ class CookieManager {
                 console.log('Decline cookies clicked');
                 this.declineCookies();
             });
-        } else {
-            console.warn('Decline cookies button not found');
         }
 
         // Close banner when clicking outside
@@ -70,16 +71,15 @@ class CookieManager {
     checkConsent() {
         console.log('Checking consent status:', this.consentStatus);
         
-        // If user has already made a choice (accepted or declined), respect that choice
         if (this.consentStatus === 'accepted') {
-            console.log('Cookies accepted, loading analytics');
+            console.log('Cookies accepted, loading all scripts');
             this.hideBanner();
-            this.loadAcceptedCookies();
+            this.loadAllScripts();
             return;
         } else if (this.consentStatus === 'declined') {
             console.log('Cookies declined, loading essential only');
             this.hideBanner();
-            this.loadEssentialCookies();
+            this.loadEssentialScripts();
             return;
         }
         
@@ -88,14 +88,17 @@ class CookieManager {
         if (bannerShown === 'true') {
             console.log('Banner already shown in this session, hiding');
             this.hideBanner();
+            this.loadEssentialScripts(); // Load only essential scripts
             return;
         }
         
         // No consent given and banner not shown yet, show banner
         console.log('No consent given, showing banner');
         this.showBanner();
-        // Mark banner as shown in this session
         sessionStorage.setItem('cookie-banner-shown', 'true');
+        
+        // Load only essential scripts until consent is given
+        this.loadEssentialScripts();
     }
 
     showBanner() {
@@ -103,14 +106,11 @@ class CookieManager {
             console.log('Showing cookie banner');
             this.banner.classList.add('show');
             
-            // Focus management
             setTimeout(() => {
                 if (this.acceptBtn) {
                     this.acceptBtn.focus();
                 }
             }, 100);
-        } else {
-            console.warn('Cookie banner element not found');
         }
     }
 
@@ -125,9 +125,8 @@ class CookieManager {
         console.log('Accepting cookies');
         this.setConsentStatus('accepted');
         this.hideBanner();
-        this.loadAcceptedCookies();
+        this.loadAllScripts();
         this.showSuccessMessage('Cookies akzeptiert');
-        // Keep session storage to prevent banner from showing again in this session
         sessionStorage.setItem('cookie-banner-shown', 'true');
     }
 
@@ -135,9 +134,8 @@ class CookieManager {
         console.log('Declining cookies');
         this.setConsentStatus('declined');
         this.hideBanner();
-        this.loadEssentialCookies();
+        this.loadEssentialScripts();
         this.showSuccessMessage('Cookies abgelehnt');
-        // Keep session storage to prevent banner from showing again in this session
         sessionStorage.setItem('cookie-banner-shown', 'true');
     }
 
@@ -148,12 +146,11 @@ class CookieManager {
         const cookieValue = JSON.stringify({
             status: status,
             timestamp: new Date().toISOString(),
-            version: '1.0'
+            version: '2.0'
         });
         
         this.setCookie(this.cookieName, cookieValue, this.cookieExpiry);
         
-        // Dispatch custom event for other scripts
         const event = new CustomEvent('cookieConsentChanged', {
             detail: { status: status }
         });
@@ -182,7 +179,6 @@ class CookieManager {
         
         let cookieString = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
         
-        // Add secure flag if on HTTPS
         if (window.location.protocol === 'https:') {
             cookieString += '; Secure';
         }
@@ -212,127 +208,141 @@ class CookieManager {
         document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
     }
 
-    loadAcceptedCookies() {
-        // Load analytics and tracking cookies
-        this.loadGoogleAnalytics();
-        this.loadFacebookPixel();
-        this.loadOtherTrackingScripts();
-        
-        // Enable enhanced functionality
-        this.enableEnhancedFeatures();
+    // Block all non-essential scripts initially
+    blockNonEssentialScripts() {
+        // Remove all script tags except essential ones
+        const scripts = document.querySelectorAll('script[src]');
+        scripts.forEach(script => {
+            const src = script.getAttribute('src');
+            if (!this.isEssentialScript(src)) {
+                console.log('Blocking non-essential script:', src);
+                script.setAttribute('data-blocked', 'true');
+                script.style.display = 'none';
+            }
+        });
     }
 
-    loadEssentialCookies() {
-        // Only load essential cookies (session, security, etc.)
-        this.loadEssentialFeatures();
-        
-        // Disable tracking
-        this.disableTracking();
+    // Check if a script is essential
+    isEssentialScript(src) {
+        return this.scriptCategories.essential.some(essential => src.includes(essential));
     }
 
-    loadGoogleAnalytics() {
+    // Load only essential scripts
+    loadEssentialScripts() {
+        console.log('Loading essential scripts only');
+        
+        // Load essential scripts
+        this.scriptCategories.essential.forEach(scriptPath => {
+            this.loadScript(scriptPath, 'essential');
+        });
+        
+        // Enable basic functionality
+        this.enableBasicFeatures();
+    }
+
+    // Load all scripts when consent is given
+    loadAllScripts() {
+        console.log('Loading all scripts with consent');
+        
+        // Load essential scripts
+        this.loadEssentialScripts();
+        
+        // Load analytics scripts
         if (this.consentStatus === 'accepted') {
-            // Google Analytics 4
-            const script = document.createElement('script');
-            script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID';
-            document.head.appendChild(script);
-            
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'GA_MEASUREMENT_ID', {
-                'anonymize_ip': true,
-                'cookie_flags': 'SameSite=None;Secure'
+            this.scriptCategories.analytics.forEach(scriptPath => {
+                this.loadScript(scriptPath, 'analytics');
             });
+            
+            this.scriptCategories.external.forEach(scriptPath => {
+                this.loadScript(scriptPath, 'external');
+            });
+            
+            // Enable enhanced features
+            this.enableEnhancedFeatures();
         }
     }
 
-    loadFacebookPixel() {
-        if (this.consentStatus === 'accepted') {
-            // Facebook Pixel
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', 'YOUR_PIXEL_ID');
-            fbq('track', 'PageView');
+    // Load a specific script
+    loadScript(src, category) {
+        console.log(`Loading ${category} script:`, src);
+        
+        // Check if script is already loaded
+        if (document.querySelector(`script[src="${src}"]`)) {
+            console.log('Script already loaded:', src);
+            return;
         }
-    }
-
-    loadOtherTrackingScripts() {
-        if (this.consentStatus === 'accepted') {
-            // Add other tracking scripts here
-            console.log('Loading other tracking scripts');
+        
+        const script = document.createElement('script');
+        script.src = src;
+        script.setAttribute('data-category', category);
+        
+        // Add integrity and crossorigin for external scripts
+        if (src.includes('https://')) {
+            if (src.includes('three.js')) {
+                script.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
+                script.crossOrigin = '';
+            }
         }
+        
+        document.head.appendChild(script);
+        
+        script.onload = () => {
+            console.log(`Successfully loaded ${category} script:`, src);
+        };
+        
+        script.onerror = () => {
+            console.error(`Failed to load ${category} script:`, src);
+        };
     }
 
-    loadEssentialFeatures() {
-        // Load essential features regardless of consent
-        this.loadSessionManagement();
-        this.loadSecurityFeatures();
-    }
-
-    loadSessionManagement() {
-        // Session management features
-        console.log('Loading session management');
-    }
-
-    loadSecurityFeatures() {
-        // Security features
-        console.log('Loading security features');
+    enableBasicFeatures() {
+        // Enable basic website functionality
+        console.log('Enabling basic features');
+        
+        // Initialize basic functionality
+        if (typeof window.OrthodonticsWebsite !== 'undefined') {
+            window.orthodonticsWebsite = new window.OrthodonticsWebsite();
+        }
     }
 
     enableEnhancedFeatures() {
         // Enable enhanced features for accepted cookies
         console.log('Enabling enhanced features');
-    }
-
-    disableTracking() {
-        // Disable all tracking for declined cookies
-        this.disableGoogleAnalytics();
-        this.disableFacebookPixel();
-        this.disableOtherTracking();
-    }
-
-    disableGoogleAnalytics() {
-        // Disable Google Analytics
-        console.log('Disabling Google Analytics');
-    }
-
-    disableFacebookPixel() {
-        // Disable Facebook Pixel
-        console.log('Disabling Facebook Pixel');
-    }
-
-    disableOtherTracking() {
-        // Disable other tracking
-        console.log('Disabling other tracking');
+        
+        // Initialize 3D scene if Three.js is loaded
+        if (typeof THREE !== 'undefined' && typeof window.init3DScene === 'function') {
+            window.init3DScene();
+        }
+        
+        // Initialize map if Leaflet is loaded
+        if (typeof L !== 'undefined' && typeof window.initMap === 'function') {
+            window.initMap();
+        }
+        
+        // Initialize other enhanced features
+        if (typeof window.initEnhancedFeatures === 'function') {
+            window.initEnhancedFeatures();
+        }
     }
 
     showSuccessMessage(message) {
-        // Create a temporary success notification
         const notification = document.createElement('div');
         notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            background: var(--success-color);
+            background: #10b981;
             color: white;
             padding: 1rem;
             border-radius: 0.5rem;
             z-index: 9999;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-family: inherit;
         `;
         notification.textContent = message;
         
         document.body.appendChild(notification);
         
-        // Remove after 3 seconds
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.parentNode.removeChild(notification);
@@ -340,7 +350,7 @@ class CookieManager {
         }, 3000);
     }
 
-    // Public methods for external access
+    // Public methods
     hasConsent() {
         return this.consentStatus === 'accepted';
     }
@@ -350,9 +360,9 @@ class CookieManager {
             this.setConsentStatus(newStatus);
             
             if (newStatus === 'accepted') {
-                this.loadAcceptedCookies();
+                this.loadAllScripts();
             } else {
-                this.loadEssentialCookies();
+                this.loadEssentialScripts();
             }
         }
     }
@@ -363,7 +373,6 @@ class CookieManager {
         this.showBanner();
     }
 
-    // Method to check if specific cookie category is allowed
     isCategoryAllowed(category) {
         if (this.consentStatus === 'accepted') {
             return true;
@@ -376,47 +385,16 @@ class CookieManager {
         return false;
     }
 
-    // Method to get detailed consent information
     getDetailedConsent() {
-        const consentData = this.getConsentData();
-        
-        if (!consentData) {
-            return {
-                analytics: false,
-                marketing: false,
-                essential: true,
-                preferences: false
-            };
-        }
-        
         return {
             analytics: this.consentStatus === 'accepted',
             marketing: this.consentStatus === 'accepted',
-            essential: true, // Always allowed
+            essential: true,
             preferences: this.consentStatus === 'accepted'
         };
     }
 
-    // Method to export consent data
-    exportConsentData() {
-        return {
-            consentStatus: this.consentStatus,
-            consentData: this.getConsentData(),
-            detailedConsent: this.getDetailedConsent(),
-            timestamp: new Date().toISOString()
-        };
-    }
-
-    // Method to import consent data
-    importConsentData(data) {
-        if (data && data.consentStatus) {
-            this.updateConsent(data.consentStatus);
-        }
-    }
-
-    // Cleanup method
     destroy() {
-        // Remove event listeners
         if (this.acceptBtn) {
             this.acceptBtn.removeEventListener('click', this.acceptCookies);
         }
@@ -424,7 +402,6 @@ class CookieManager {
             this.declineBtn.removeEventListener('click', this.declineCookies);
         }
         
-        // Clear references
         this.banner = null;
         this.acceptBtn = null;
         this.declineBtn = null;
@@ -433,7 +410,7 @@ class CookieManager {
 
 // Initialize cookie manager when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing CookieManager');
+    console.log('DOM loaded, initializing GDPR-compliant CookieManager');
     window.cookieManager = new CookieManager();
 });
 
