@@ -8,6 +8,7 @@ class OrthodonticsWebsite {
         this.header = document.getElementById('header');
         this.mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
         this.nav = document.querySelector('.nav');
+        this.mobileNav = document.querySelector('.mobile-nav');
         this.isMobileMenuOpen = false;
         this.lastScrollTop = 0;
         this.scrollThreshold = 100;
@@ -106,7 +107,7 @@ class OrthodonticsWebsite {
         // Close mobile menu when clicking outside
         document.addEventListener('click', (e) => {
             if (this.isMobileMenuOpen && 
-                !this.nav.contains(e.target) && 
+                !this.mobileNav.contains(e.target) && 
                 !this.mobileMenuToggle.contains(e.target)) {
                 this.closeMobileMenu();
             }
@@ -124,22 +125,28 @@ class OrthodonticsWebsite {
     }
 
     openMobileMenu() {
-        this.nav.classList.add('mobile-open');
+        if (this.mobileNav) {
+            this.mobileNav.classList.add('show');
+        }
         this.mobileMenuToggle.classList.add('active');
         this.mobileMenuToggle.setAttribute('aria-expanded', 'true');
         
         // Animate hamburger to X
         const lines = this.mobileMenuToggle.querySelectorAll('.hamburger-line');
-        lines[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-        lines[1].style.opacity = '0';
-        lines[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+        if (lines.length >= 3) {
+            lines[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+            lines[1].style.opacity = '0';
+            lines[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+        }
         
         // Prevent body scroll
         document.body.style.overflow = 'hidden';
     }
 
     closeMobileMenu() {
-        this.nav.classList.remove('mobile-open');
+        if (this.mobileNav) {
+            this.mobileNav.classList.remove('show');
+        }
         this.mobileMenuToggle.classList.remove('active');
         this.mobileMenuToggle.setAttribute('aria-expanded', 'false');
         

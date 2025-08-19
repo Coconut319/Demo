@@ -13,11 +13,21 @@ class CookieManager {
         this.cookieExpiry = 365; // days
         this.consentStatus = this.getConsentStatus();
         
+        console.log('CookieManager initialized', {
+            banner: this.banner,
+            acceptBtn: this.acceptBtn,
+            declineBtn: this.declineBtn,
+            consentStatus: this.consentStatus
+        });
+        
         this.init();
     }
 
     init() {
-        if (!this.banner) return;
+        if (!this.banner) {
+            console.warn('Cookie banner not found');
+            return;
+        }
         
         this.setupEventListeners();
         this.checkConsent();
@@ -26,14 +36,20 @@ class CookieManager {
     setupEventListeners() {
         if (this.acceptBtn) {
             this.acceptBtn.addEventListener('click', () => {
+                console.log('Accept cookies clicked');
                 this.acceptCookies();
             });
+        } else {
+            console.warn('Accept cookies button not found');
         }
 
         if (this.declineBtn) {
             this.declineBtn.addEventListener('click', () => {
+                console.log('Decline cookies clicked');
                 this.declineCookies();
             });
+        } else {
+            console.warn('Decline cookies button not found');
         }
 
         // Close banner when clicking outside
@@ -52,20 +68,39 @@ class CookieManager {
     }
 
     checkConsent() {
-        if (this.consentStatus === null) {
-            // No consent given yet, show banner
-            this.showBanner();
-        } else if (this.consentStatus === 'accepted') {
-            // Cookies accepted, load analytics and other tracking
+        console.log('Checking consent status:', this.consentStatus);
+        
+        // If user has already made a choice (accepted or declined), respect that choice
+        if (this.consentStatus === 'accepted') {
+            console.log('Cookies accepted, loading analytics');
+            this.hideBanner();
             this.loadAcceptedCookies();
+            return;
         } else if (this.consentStatus === 'declined') {
-            // Cookies declined, only load essential cookies
+            console.log('Cookies declined, loading essential only');
+            this.hideBanner();
             this.loadEssentialCookies();
+            return;
         }
+        
+        // No consent given yet - check if banner was already shown in this session
+        const bannerShown = sessionStorage.getItem('cookie-banner-shown');
+        if (bannerShown === 'true') {
+            console.log('Banner already shown in this session, hiding');
+            this.hideBanner();
+            return;
+        }
+        
+        // No consent given and banner not shown yet, show banner
+        console.log('No consent given, showing banner');
+        this.showBanner();
+        // Mark banner as shown in this session
+        sessionStorage.setItem('cookie-banner-shown', 'true');
     }
 
     showBanner() {
         if (this.banner) {
+            console.log('Showing cookie banner');
             this.banner.classList.add('show');
             
             // Focus management
@@ -74,30 +109,40 @@ class CookieManager {
                     this.acceptBtn.focus();
                 }
             }, 100);
+        } else {
+            console.warn('Cookie banner element not found');
         }
     }
 
     hideBanner() {
         if (this.banner) {
+            console.log('Hiding cookie banner');
             this.banner.classList.remove('show');
         }
     }
 
     acceptCookies() {
+        console.log('Accepting cookies');
         this.setConsentStatus('accepted');
         this.hideBanner();
         this.loadAcceptedCookies();
         this.showSuccessMessage('Cookies akzeptiert');
+        // Keep session storage to prevent banner from showing again in this session
+        sessionStorage.setItem('cookie-banner-shown', 'true');
     }
 
     declineCookies() {
+        console.log('Declining cookies');
         this.setConsentStatus('declined');
         this.hideBanner();
         this.loadEssentialCookies();
         this.showSuccessMessage('Cookies abgelehnt');
+        // Keep session storage to prevent banner from showing again in this session
+        sessionStorage.setItem('cookie-banner-shown', 'true');
     }
 
     setConsentStatus(status) {
+        console.log('Setting consent status:', status);
         this.consentStatus = status;
         
         const cookieValue = JSON.stringify({
@@ -135,7 +180,7 @@ class CookieManager {
         const expires = new Date();
         expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
         
-        const cookieString = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+        let cookieString = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
         
         // Add secure flag if on HTTPS
         if (window.location.protocol === 'https:') {
@@ -143,6 +188,7 @@ class CookieManager {
         }
         
         document.cookie = cookieString;
+        console.log('Cookie set:', name, value);
     }
 
     getCookie(name) {
@@ -199,12 +245,6 @@ class CookieManager {
                 'anonymize_ip': true,
                 'cookie_flags': 'SameSite=None;Secure'
             });
-            
-            // Set consent mode
-            gtag('consent', 'default', {
-                'analytics_storage': 'granted',
-                'ad_storage': 'granted'
-            });
         }
     }
 
@@ -219,7 +259,6 @@ class CookieManager {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            
             fbq('init', 'YOUR_PIXEL_ID');
             fbq('track', 'PageView');
         }
@@ -227,42 +266,34 @@ class CookieManager {
 
     loadOtherTrackingScripts() {
         if (this.consentStatus === 'accepted') {
-            // Load other tracking scripts here
-            // Example: Hotjar, Crazy Egg, etc.
+            // Add other tracking scripts here
+            console.log('Loading other tracking scripts');
         }
     }
 
     loadEssentialFeatures() {
-        // Load essential functionality that doesn't require tracking
+        // Load essential features regardless of consent
         this.loadSessionManagement();
         this.loadSecurityFeatures();
     }
 
     loadSessionManagement() {
-        // Session management cookies
-        if (!this.getCookie('session-id')) {
-            const sessionId = this.generateSessionId();
-            this.setCookie('session-id', sessionId, 1); // 1 day
-        }
+        // Session management features
+        console.log('Loading session management');
     }
 
     loadSecurityFeatures() {
-        // CSRF protection, etc.
-        if (!this.getCookie('csrf-token')) {
-            const csrfToken = this.generateCSRFToken();
-            this.setCookie('csrf-token', csrfToken, 1);
-        }
+        // Security features
+        console.log('Loading security features');
     }
 
     enableEnhancedFeatures() {
-        // Enable features that require consent
-        this.enablePersonalization();
-        this.enableAnalytics();
-        this.enableMarketing();
+        // Enable enhanced features for accepted cookies
+        console.log('Enabling enhanced features');
     }
 
     disableTracking() {
-        // Disable all tracking scripts
+        // Disable all tracking for declined cookies
         this.disableGoogleAnalytics();
         this.disableFacebookPixel();
         this.disableOtherTracking();
@@ -270,126 +301,48 @@ class CookieManager {
 
     disableGoogleAnalytics() {
         // Disable Google Analytics
-        if (window.gtag) {
-            gtag('consent', 'default', {
-                'analytics_storage': 'denied',
-                'ad_storage': 'denied'
-            });
-        }
+        console.log('Disabling Google Analytics');
     }
 
     disableFacebookPixel() {
         // Disable Facebook Pixel
-        if (window.fbq) {
-            fbq('consent', 'revoke');
-        }
+        console.log('Disabling Facebook Pixel');
     }
 
     disableOtherTracking() {
-        // Disable other tracking scripts
-    }
-
-    enablePersonalization() {
-        // Enable personalized content
-        document.body.classList.add('personalization-enabled');
-    }
-
-    enableAnalytics() {
-        // Enable analytics features
-        document.body.classList.add('analytics-enabled');
-    }
-
-    enableMarketing() {
-        // Enable marketing features
-        document.body.classList.add('marketing-enabled');
-    }
-
-    generateSessionId() {
-        return 'session_' + Math.random().toString(36).substr(2, 9);
-    }
-
-    generateCSRFToken() {
-        return 'csrf_' + Math.random().toString(36).substr(2, 9);
+        // Disable other tracking
+        console.log('Disabling other tracking');
     }
 
     showSuccessMessage(message) {
-        // Create success notification
+        // Create a temporary success notification
         const notification = document.createElement('div');
-        notification.className = 'cookie-notification success';
-        notification.setAttribute('role', 'alert');
-        notification.innerHTML = `
-            <div class="notification-content">
-                <span class="notification-icon">✓</span>
-                <span class="notification-text">${message}</span>
-                <button class="notification-close" aria-label="Benachrichtigung schließen">×</button>
-            </div>
-        `;
-        
-        // Add styles
         notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
             background: var(--success-color);
             color: white;
-            padding: 12px 16px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            z-index: var(--z-toast);
-            transform: translateX(100%);
-            transition: transform var(--transition-base);
-            max-width: 300px;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            z-index: 9999;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         `;
+        notification.textContent = message;
         
         document.body.appendChild(notification);
         
-        // Animate in
-        setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
-        
-        // Add close functionality
-        const closeBtn = notification.querySelector('.notification-close');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
-                this.removeNotification(notification);
-            });
-        }
-        
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            this.removeNotification(notification);
-        }, 5000);
-    }
-
-    removeNotification(notification) {
-        notification.style.transform = 'translateX(100%)';
+        // Remove after 3 seconds
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.parentNode.removeChild(notification);
             }
-        }, 300);
+        }, 3000);
     }
 
-    // Public methods for external use
+    // Public methods for external access
     hasConsent() {
         return this.consentStatus === 'accepted';
-    }
-
-    hasDeclined() {
-        return this.consentStatus === 'declined';
-    }
-
-    getConsentData() {
-        const cookieValue = this.getCookie(this.cookieName);
-        if (cookieValue) {
-            try {
-                return JSON.parse(cookieValue);
-            } catch (e) {
-                return null;
-            }
-        }
-        return null;
     }
 
     updateConsent(newStatus) {
@@ -480,6 +433,7 @@ class CookieManager {
 
 // Initialize cookie manager when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing CookieManager');
     window.cookieManager = new CookieManager();
 });
 

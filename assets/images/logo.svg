@@ -1,0 +1,22 @@
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1F7A8C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2A9D8F;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background rectangle -->
+  <rect x="0" y="0" width="200" height="60" rx="8" fill="url(#logoGradient)"/>
+  
+  <!-- Tooth icon -->
+  <path d="M15 20 L15 35 L25 40 L35 35 L35 20 L30 15 L20 15 Z" fill="white"/>
+  <circle cx="25" cy="25" r="2" fill="#1F7A8C"/>
+  
+  <!-- Text -->
+  <text x="50" y="25" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">Dr. Schmidt</text>
+  <text x="50" y="40" font-family="Arial, sans-serif" font-size="10" fill="white">&amp; Kollegen</text>
+  
+  <!-- Subtitle -->
+  <text x="50" y="52" font-family="Arial, sans-serif" font-size="8" fill="#E1F5F7">Kieferorthopädie</text>
+</svg>
