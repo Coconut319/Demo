@@ -5,10 +5,18 @@
 
 class OrthodonticsWebsite {
     constructor() {
+        console.log('OrthodonticsWebsite constructor called');
         this.header = document.getElementById('header');
         this.mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
         this.nav = document.querySelector('.nav');
         this.mobileNav = document.querySelector('.mobile-nav');
+        
+        console.log('Elements found:');
+        console.log('- Header:', this.header);
+        console.log('- Mobile menu toggle:', this.mobileMenuToggle);
+        console.log('- Nav:', this.nav);
+        console.log('- Mobile nav:', this.mobileNav);
+        
         this.isMobileMenuOpen = false;
         this.lastScrollTop = 0;
         this.scrollThreshold = 100;
@@ -98,12 +106,15 @@ class OrthodonticsWebsite {
     }
 
     setupMobileMenu() {
+        console.log('Setting up mobile menu...');
         if (!this.mobileMenuToggle) {
-            console.error('Mobile menu toggle not found!');
+            console.error('Mobile menu toggle button not found!');
             return;
         }
 
+        console.log('Adding click event listener to mobile menu toggle');
         this.mobileMenuToggle.addEventListener('click', (e) => {
+            console.log('Mobile menu toggle clicked!');
             e.preventDefault();
             e.stopPropagation();
             this.toggleMobileMenu();
@@ -557,6 +568,7 @@ class OrthodonticsWebsite {
 
 // Initialize the website when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing website...');
     new OrthodonticsWebsite();
 });
 

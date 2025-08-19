@@ -1282,6 +1282,7 @@ button {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+    display: none; /* Hidden on desktop */
 }
 
 .mobile-nav.show {
@@ -1357,6 +1358,7 @@ button {
     }
     
     .mobile-nav {
+        display: block; /* Show on mobile */
         top: var(--header-height-mobile);
     }
     
