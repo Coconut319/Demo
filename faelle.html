@@ -540,5 +540,43 @@
     <script src="js/animations.js"></script>
     <script src="js/cases-gallery.js"></script>
     <script src="js/cookies.js"></script>
+    
+    <!-- Simple mobile menu fallback -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Fallback script loaded');
+            
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileNav = document.querySelector('.mobile-nav');
+            
+            console.log('Fallback - Mobile toggle found:', mobileToggle);
+            console.log('Fallback - Mobile nav found:', mobileNav);
+            
+            if (mobileToggle && mobileNav) {
+                mobileToggle.addEventListener('click', function(e) {
+                    console.log('Fallback - Mobile menu clicked!');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    mobileNav.classList.toggle('show');
+                    mobileToggle.classList.toggle('active');
+                    
+                    // Animate hamburger
+                    const lines = mobileToggle.querySelectorAll('.hamburger-line');
+                    if (lines.length >= 3) {
+                        if (mobileNav.classList.contains('show')) {
+                            lines[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                            lines[1].style.opacity = '0';
+                            lines[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+                        } else {
+                            lines[0].style.transform = 'none';
+                            lines[1].style.opacity = '1';
+                            lines[2].style.transform = 'none';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
