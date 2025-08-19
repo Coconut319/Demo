@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Schmidt & Kollegen - Moderne Kieferorthopädie in München</title>
+    <meta name="description" content="Erfahren Sie mehr über moderne Kieferorthopädie mit unsichtbaren Alignern, fester Spange und Lingualtechnik. Jetzt Termin vereinbaren!">
+    <meta name="keywords" content="Kieferorthopädie, München, Aligner, feste Spange, Lingualtechnik, Zahnspange">
+    <meta name="author" content="Dr. Schmidt & Kollegen">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Dr. Schmidt & Kollegen - Moderne Kieferorthopädie">
+    <meta property="og:description" content="Professionelle Kieferorthopädie mit modernsten Methoden. Jetzt Termin vereinbaren!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kieferorthopaedie-muenchen.de">
+    <meta property="og:image" content="assets/images/og-image.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dr. Schmidt & Kollegen - Moderne Kieferorthopädie">
+    <meta name="twitter:description" content="Professionelle Kieferorthopädie mit modernsten Methoden">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="js/main.js" as="script">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <!-- Three.js for 3D elements -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalBusiness",
+        "name": "Dr. Schmidt & Kollegen - Kieferorthopädie",
+        "description": "Moderne Kieferorthopädie mit unsichtbaren Alignern, fester Spange und Lingualtechnik",
+        "url": "https://kieferorthopaedie-muenchen.de",
+        "telephone": "+49-89-12345678",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Maximilianstraße 123",
+            "addressLocality": "München",
+            "postalCode": "80539",
+            "addressCountry": "DE"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 48.1351,
+            "longitude": 11.5820
+        },
+        "openingHours": "Mo-Fr 08:00-18:00",
+        "priceRange": "€€",
+        "medicalSpecialty": "Orthodontics",
+        "availableService": [
+            {
+                "@type": "MedicalProcedure",
+                "name": "Unsichtbare Aligner",
+                "description": "Moderne Kieferorthopädie mit transparenten Schienen"
+            },
+            {
+                "@type": "MedicalProcedure", 
+                "name": "Feste Spange",
+                "description": "Traditionelle Kieferorthopädie mit Brackets"
+            },
+            {
+                "@type": "MedicalProcedure",
+                "name": "Lingualtechnik",
+                "description": "Unsichtbare feste Spange von innen"
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+    
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-content">
+            <p>Wir verwenden Cookies, um Ihre Erfahrung auf unserer Website zu verbessern. 
+               <a href="datenschutz.html">Mehr erfahren</a>
+            </p>
+            <div class="cookie-buttons">
+                <button id="accept-cookies" class="btn btn-primary">Akzeptieren</button>
+                <button id="decline-cookies" class="btn btn-secondary">Ablehnen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <div class="logo">
+                    <a href="index.html" aria-label="Zur Startseite">
+                        <img src="assets/images/logo.svg" alt="Dr. Schmidt & Kollegen Logo" class="logo-img">
+                        <span class="logo-text">Dr. Schmidt & Kollegen</span>
+                    </a>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav" role="navigation" aria-label="Hauptnavigation">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="leistungen.html" class="nav-link">Leistungen</a>
+                            <ul class="nav-dropdown">
+                                <li><a href="leistungen.html#aligner">Unsichtbare Aligner</a></li>
+                                <li><a href="leistungen.html#feste-spange">Feste Spange</a></li>
+                                <li><a href="leistungen.html#lingual">Lingualtechnik</a></li>
+                                <li><a href="leistungen.html#fruehbehandlung">Frühbehandlung</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="team.html" class="nav-link">Team</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="praxis.html" class="nav-link">Praxis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="faelle.html" class="nav-link">Fälle</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="preise.html" class="nav-link">Preise</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="blog.html" class="nav-link">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="kontakt.html" class="nav-link">Kontakt</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- CTA Button -->
+                <div class="header-cta">
+                    <a href="termin.html" class="btn btn-primary btn-cta">
+                        <span class="btn-icon">📅</span>
+                        Termin buchen
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" aria-label="Menü öffnen" aria-expanded="false">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-background">
+                <div id="hero-3d" class="hero-3d"></div>
+                <div class="hero-overlay"></div>
+            </div>
+            
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 class="hero-title">
+                            <span class="hero-title-line">Moderne Kieferorthopädie</span>
+                            <span class="hero-title-line">für ein perfektes Lächeln</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            Erleben Sie Kieferorthopädie auf höchstem Niveau mit modernsten Methoden 
+                            und individueller Behandlung. Ihr Weg zu einem gesunden, schönen Lächeln.
+                        </p>
+                        <div class="hero-cta">
+                            <a href="termin.html" class="btn btn-primary btn-large">
+                                <span class="btn-icon">📅</span>
+                                Jetzt Termin vereinbaren
+                            </a>
+                            <a href="leistungen.html" class="btn btn-secondary btn-large">
+                                <span class="btn-icon">💎</span>
+                                Unsere Leistungen
+                            </a>
+                        </div>
+                        <div class="hero-features">
+                            <div class="hero-feature">
+                                <span class="feature-icon">⭐</span>
+                                <span>Über 20 Jahre Erfahrung</span>
+                            </div>
+                            <div class="hero-feature">
+                                <span class="feature-icon">🔬</span>
+                                <span>Modernste Technologie</span>
+                            </div>
+                            <div class="hero-feature">
+                                <span class="feature-icon">👨‍⚕️</span>
+                                <span>Spezialisierte Ärzte</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-scroll-indicator">
+                <span class="scroll-text">Scrollen Sie nach unten</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </section>
+
+        <!-- Services Preview Section -->
+        <section class="services-preview" id="services-preview">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Unsere Leistungen</h2>
+                    <p class="section-subtitle">
+                        Von unsichtbaren Alignern bis zur Lingualtechnik - wir bieten Ihnen 
+                        die modernsten Methoden der Kieferorthopädie
+                    </p>
+                </div>
+                
+                <div class="services-grid">
+                    <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="service-icon">
+                            <img src="assets/images/aligner-icon.svg" alt="Aligner Icon">
+                        </div>
+                        <h3 class="service-title">Unsichtbare Aligner</h3>
+                        <p class="service-description">
+                            Transparente Schienen für eine diskrete und komfortable Behandlung. 
+                            Perfekt für Erwachsene und Jugendliche.
+                        </p>
+                        <ul class="service-features">
+                            <li>Entfernbar und unsichtbar</li>
+                            <li>Keine Einschränkungen beim Essen</li>
+                            <li>Einfache Reinigung</li>
+                        </ul>
+                        <a href="leistungen.html#aligner" class="btn btn-outline">Mehr erfahren</a>
+                    </div>
+
+                    <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="service-icon">
+                            <img src="assets/images/bracket-icon.svg" alt="Bracket Icon">
+                        </div>
+                        <h3 class="service-title">Feste Spange</h3>
+                        <p class="service-description">
+                            Die bewährte Methode für komplexe Korrekturen. 
+                            Moderne Brackets für optimale Ergebnisse.
+                        </p>
+                        <ul class="service-features">
+                            <li>Für alle Altersgruppen</li>
+                            <li>Hochwirksam bei komplexen Fällen</li>
+                            <li>Moderne, kleine Brackets</li>
+                        </ul>
+                        <a href="leistungen.html#feste-spange" class="btn btn-outline">Mehr erfahren</a>
+                    </div>
+
+                    <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="service-icon">
+                            <img src="assets/images/lingual-icon.svg" alt="Lingual Icon">
+                        </div>
+                        <h3 class="service-title">Lingualtechnik</h3>
+                        <p class="service-description">
+                            Die unsichtbare feste Spange von innen. 
+                            Für alle, die eine feste Spange wünschen, aber unsichtbar.
+                        </p>
+                        <ul class="service-features">
+                            <li>Komplett unsichtbar</li>
+                            <li>Feste Spange von innen</li>
+                            <li>Individuell gefertigt</li>
+                        </ul>
+                        <a href="leistungen.html#lingual" class="btn btn-outline">Mehr erfahren</a>
+                    </div>
+
+                    <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="service-icon">
+                            <img src="assets/images/early-icon.svg" alt="Frühbehandlung Icon">
+                        </div>
+                        <h3 class="service-title">Frühbehandlung</h3>
+                        <p class="service-description">
+                            Frühzeitige Behandlung bei Kindern für optimale Ergebnisse 
+                            und kürzere Behandlungszeiten.
+                        </p>
+                        <ul class="service-features">
+                            <li>Ab 6 Jahren möglich</li>
+                            <li>Präventive Maßnahmen</li>
+                            <li>Kürzere Behandlungszeiten</li>
+                        </ul>
+                        <a href="leistungen.html#fruehbehandlung" class="btn btn-outline">Mehr erfahren</a>
+                    </div>
+                </div>
+                
+                <div class="services-cta">
+                    <a href="leistungen.html" class="btn btn-primary btn-large">
+                        Alle Leistungen entdecken
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section" id="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text" data-aos="fade-right">
+                        <h2 class="section-title">Warum Dr. Schmidt & Kollegen?</h2>
+                        <p class="about-description">
+                            Seit über 20 Jahren sind wir Ihr Partner für moderne Kieferorthopädie in München. 
+                            Unser Team aus erfahrenen Spezialisten kombiniert medizinische Exzellenz mit 
+                            den neuesten Technologien für optimale Behandlungsergebnisse.
+                        </p>
+                        
+                        <div class="about-features">
+                            <div class="about-feature">
+                                <div class="feature-icon">🏆</div>
+                                <div class="feature-content">
+                                    <h4>Über 20 Jahre Erfahrung</h4>
+                                    <p>Langjährige Expertise in allen Bereichen der Kieferorthopädie</p>
+                                </div>
+                            </div>
+                            
+                            <div class="about-feature">
+                                <div class="feature-icon">🔬</div>
+                                <div class="feature-content">
+                                    <h4>Modernste Technologie</h4>
+                                    <p>3D-Scanner, digitale Planung und neueste Behandlungsmethoden</p>
+                                </div>
+                            </div>
+                            
+                            <div class="about-feature">
+                                <div class="feature-icon">👨‍⚕️</div>
+                                <div class="feature-content">
+                                    <h4>Spezialisierte Ärzte</h4>
+                                    <p>Unser Team besteht aus erfahrenen Kieferorthopäden</p>
+                                </div>
+                            </div>
+                            
+                            <div class="about-feature">
+                                <div class="feature-icon">💝</div>
+                                <div class="feature-content">
+                                    <h4>Individuelle Behandlung</h4>
+                                    <p>Jeder Patient erhält einen maßgeschneiderten Behandlungsplan</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="about-cta">
+                            <a href="team.html" class="btn btn-primary">Unser Team kennenlernen</a>
+                            <a href="praxis.html" class="btn btn-secondary">Praxis entdecken</a>
+                        </div>
+                    </div>
+                    
+                    <div class="about-image" data-aos="fade-left">
+                        <div class="image-container">
+                            <img src="assets/images/team-photo.jpg" alt="Unser Team bei der Arbeit" class="about-img">
+                            <div class="image-overlay">
+                                <div class="stats">
+                                    <div class="stat">
+                                        <span class="stat-number">5000+</span>
+                                        <span class="stat-label">Zufriedene Patienten</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-number">20+</span>
+                                        <span class="stat-label">Jahre Erfahrung</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials" id="testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Das sagen unsere Patienten</h2>
+                    <p class="section-subtitle">
+                        Echte Erfahrungsberichte von zufriedenen Patienten
+                    </p>
+                </div>
+                
+                <div class="testimonials-slider" id="testimonials-slider">
+                    <div class="testimonial-slide active">
+                        <div class="testimonial-content">
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p class="testimonial-text">
+                                "Die Behandlung mit den unsichtbaren Alignern war fantastisch! 
+                                Dr. Schmidt hat mich während der gesamten Zeit professionell und 
+                                einfühlsam betreut. Das Ergebnis übertrifft alle meine Erwartungen."
+                            </p>
+                            <div class="testimonial-author">
+                                <img src="assets/images/patient-1.jpg" alt="Sarah M." class="author-image">
+                                <div class="author-info">
+                                    <h4 class="author-name">Sarah M.</h4>
+                                    <span class="author-treatment">Unsichtbare Aligner</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide">
+                        <div class="testimonial-content">
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p class="testimonial-text">
+                                "Meine Tochter hat ihre feste Spange hier bekommen und ist sehr zufrieden. 
+                                Das Team ist sehr geduldig und erklärt alles verständlich. 
+                                Die Praxis ist modern und einladend."
+                            </p>
+                            <div class="testimonial-author">
+                                <img src="assets/images/patient-2.jpg" alt="Michael K." class="author-image">
+                                <div class="author-info">
+                                    <h4 class="author-name">Michael K.</h4>
+                                    <span class="author-treatment">Vater von Patientin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide">
+                        <div class="testimonial-content">
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p class="testimonial-text">
+                                "Die Lingualtechnik war die perfekte Lösung für mich. 
+                                Niemand hat gemerkt, dass ich eine feste Spange trage. 
+                                Dr. Weber ist ein echter Experte auf diesem Gebiet."
+                            </p>
+                            <div class="testimonial-author">
+                                <img src="assets/images/patient-3.jpg" alt="Lisa R." class="author-image">
+                                <div class="author-info">
+                                    <h4 class="author-name">Lisa R.</h4>
+                                    <span class="author-treatment">Lingualtechnik</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonials-nav">
+                    <button class="testimonial-nav-btn prev" aria-label="Vorheriger Testimonial">
+                        <span class="nav-arrow">‹</span>
+                    </button>
+                    <div class="testimonial-dots">
+                        <button class="dot active" data-slide="0" aria-label="Testimonial 1"></button>
+                        <button class="dot" data-slide="1" aria-label="Testimonial 2"></button>
+                        <button class="dot" data-slide="2" aria-label="Testimonial 3"></button>
+                    </div>
+                    <button class="testimonial-nav-btn next" aria-label="Nächster Testimonial">
+                        <span class="nav-arrow">›</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section" id="cta">
+            <div class="container">
+                <div class="cta-content">
+                    <h2 class="cta-title">Bereit für Ihr perfektes Lächeln?</h2>
+                    <p class="cta-description">
+                        Vereinbaren Sie noch heute einen Termin für Ihre kostenlose Erstberatung. 
+                        Wir freuen uns darauf, Sie kennenzulernen!
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="termin.html" class="btn btn-primary btn-large">
+                            <span class="btn-icon">📅</span>
+                            Termin vereinbaren
+                        </a>
+                        <a href="kontakt.html" class="btn btn-secondary btn-large">
+                            <span class="btn-icon">📞</span>
+                            Kontakt aufnehmen
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="assets/images/logo-white.svg" alt="Dr. Schmidt & Kollegen Logo" class="footer-logo-img">
+                        <h3>Dr. Schmidt & Kollegen</h3>
+                    </div>
+                    <p class="footer-description">
+                        Moderne Kieferorthopädie mit über 20 Jahren Erfahrung. 
+                        Ihr Partner für ein gesundes, schönes Lächeln.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook" class="social-link">
+                            <span class="social-icon">📘</span>
+                        </a>
+                        <a href="#" aria-label="Instagram" class="social-link">
+                            <span class="social-icon">📷</span>
+                        </a>
+                        <a href="#" aria-label="LinkedIn" class="social-link">
+                            <span class="social-icon">💼</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Leistungen</h4>
+                    <ul class="footer-links">
+                        <li><a href="leistungen.html#aligner">Unsichtbare Aligner</a></li>
+                        <li><a href="leistungen.html#feste-spange">Feste Spange</a></li>
+                        <li><a href="leistungen.html#lingual">Lingualtechnik</a></li>
+                        <li><a href="leistungen.html#fruehbehandlung">Frühbehandlung</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Praxis</h4>
+                    <ul class="footer-links">
+                        <li><a href="team.html">Unser Team</a></li>
+                        <li><a href="praxis.html">Praxis-Rundgang</a></li>
+                        <li><a href="faelle.html">Behandlungsfälle</a></li>
+                        <li><a href="preise.html">Preise & Finanzierung</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Patienten</h4>
+                    <ul class="footer-links">
+                        <li><a href="termin.html">Termin buchen</a></li>
+                        <li><a href="portal.html">Patientenportal</a></li>
+                        <li><a href="faq.html">Häufige Fragen</a></li>
+                        <li><a href="notfall.html">Notfall</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Kontakt</h4>
+                    <div class="footer-contact">
+                        <div class="contact-item">
+                            <span class="contact-icon">📍</span>
+                            <div>
+                                <p>Maximilianstraße 123</p>
+                                <p>80539 München</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">📞</span>
+                            <div>
+                                <p><a href="tel:+498912345678">+49 89 123 456 78</a></p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">✉️</span>
+                            <div>
+                                <p><a href="mailto:info@kieferorthopaedie-muenchen.de">info@kieferorthopaedie-muenchen.de</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2024 Dr. Schmidt & Kollegen. Alle Rechte vorbehalten.</p>
+                    <div class="footer-legal">
+                        <a href="impressum.html">Impressum</a>
+                        <a href="datenschutz.html">Datenschutz</a>
+                        <a href="agb.html">AGB</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/3d-scene.js"></script>
+    <script src="js/testimonials.js"></script>
+    <script src="js/cookies.js"></script>
+</body>
+</html>

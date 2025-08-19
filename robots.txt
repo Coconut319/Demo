@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://kieferorthopaedie-muenchen.de/sitemap.xml
+
+# Crawl delay (optional, in seconds)
+Crawl-delay: 1
+
+# Disallow specific paths (if needed)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Allow important directories
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+
+# Block access to sensitive files
+Disallow: /.git/
+Disallow: /.env
+Disallow: /config/
+Disallow: /logs/
