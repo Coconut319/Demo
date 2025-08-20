@@ -21,3 +21,4 @@ Disallow: /.git/
 Disallow: /.env
 Disallow: /config/
 Disallow: /logs/
+

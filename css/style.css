@@ -662,7 +662,7 @@ button {
 .scroll-arrow {
     width: 20px;
     height: 20px;
-    border-right: 2px solid var(--white);
+    border-left: 2px solid var(--white);
     border-bottom: 2px solid var(--white);
     transform: rotate(45deg);
     margin: 0 auto;
@@ -834,15 +834,16 @@ button {
 }
 
 .about-feature .feature-icon {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     background: var(--secondary-color);
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl);
     flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
 }
 
 .feature-content h4 {
@@ -1168,7 +1169,7 @@ button {
     display: flex;
     align-items: flex-start;
     gap: var(--space-3);
-    color: var(--neutral-400);
+    color: var(--neutral-300);
 }
 
 .contact-icon {
